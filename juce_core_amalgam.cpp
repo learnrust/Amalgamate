@@ -26708,10 +26708,12 @@ void FileInputStream::openHandle()
 {
 	totalSize = file.getSize();
 
-	const int f = open (file.getFullPathName().toUTF8(), O_RDONLY, 00644);
+	//const int f = open (file.getFullPathName().toUTF8(), O_RDONLY, 00644);
+	int f = open (file.getFullPathName().toUTF8(), O_RDONLY, 00644);
 
 	if (f != -1)
-		fileHandle = (void*) f;
+	  //   fileHandle = (void*) f;
+	       int *fileHandle = &f;
 	else
 		status = getResultForErrno();
 }
@@ -26747,7 +26749,8 @@ void FileOutputStream::openHandle()
 {
 	if (file.exists())
 	{
-		const int f = open (file.getFullPathName().toUTF8(), O_RDWR, 00644);
+	  // const int f = open (file.getFullPathName().toUTF8(), O_RDWR, 00644);
+		int f = open (file.getFullPathName().toUTF8(), O_RDWR, 00644);
 
 		if (f != -1)
 		{
@@ -26755,7 +26758,9 @@ void FileOutputStream::openHandle()
 
 			if (currentPosition >= 0)
 			{
-				fileHandle = (void*) f;
+			        // fileHandle = (void*) f;
+  			        int *fileHandle = &f;
+
 			}
 			else
 			{
@@ -26770,14 +26775,20 @@ void FileOutputStream::openHandle()
 	}
 	else
 	{
-		const int f = open (file.getFullPathName().toUTF8(), O_RDWR + O_CREAT, 00644);
+	  //const int f = open (file.getFullPathName().toUTF8(), O_RDWR + O_CREAT, 00644);
+	  int f = open (file.getFullPathName().toUTF8(), O_RDWR + O_CREAT, 00644);
 
 		if (f != -1)
-			fileHandle = (void*) f;
+		  // fileHandle = (void*) f;
+		    int *fileHandle = &f;
 		else
 			status = getResultForErrno();
 	}
 }
+//
+// juce_core_amalgam.cpp:26776:25: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+//    fileHandle = (void*) f;
+//                         ^
 
 void FileOutputStream::closeHandle()
 {
